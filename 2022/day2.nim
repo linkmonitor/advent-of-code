@@ -20,44 +20,40 @@
 import math
 import sequtils
 import strutils
-import sugar
 
 type
   Choice  = enum Rock, Paper, Scissors
   Outcome = enum Lose, Draw, Win
   Round = tuple[a: Choice, b: Choice]
 
-func WhatLosesTo(choice:Choice):Choice =
-  [Rock:Scissors, Paper:Rock, Scissors:Paper][choice]
-
-func WhatWinsAgainst(c:choice):Choice =
-  WhatLosesTo(WhatLosesTo(choice))
+func WhatLosesTo(c:Choice):auto = [Rock:Scissors, Paper:Rock, Scissors:Paper][c]
+func WhatWinsAgainst(c:Choice):auto = WhatLosesTo(WhatLosesTo(c))
 
 func ToChoice(input:char):Choice =
-  if input in ['A','X']: return Rock
+  if input in ['A', 'X']: return Rock
   if input in ['B', 'Y']: return Paper
   if input in ['C', 'Z']: return Scissors
-  assert(false, "Invalid Input")
 
 func ToOutcome(round:Round):Outcome =
-  if round == (round.a, WhatLosesTo(round.a)): Lose
-  elif round.a == round.b: Draw
-  else: Win
+  if (round.b == WhatLosesTo(round.a)): return Lose
+  if (round.b == WhatWinsAgainst(round.a)): return Win
+  if (round.b == round.a): return Draw
 
 func ScoreRound(round:Round):int =
-  [Lose:0, Draw:3, Win:6][ToOutcome(round)] + [Rock:1, Paper:2, Scissors:3][round.b]
+  result += [Lose:0, Draw:3, Win:6][ToOutcome(round)]
+  result += [Rock:1, Paper:2, Scissors:3][round.b]
 
 func AlterRound(round:Round):Round =
   case cast[Outcome](round.b): # Entry order in Choice/Outcome permits this.
     of Lose: (round.a, WhatLosesTo(round.a))
+    of Win:  (round.a, WhatWinsAgainst(round.a))
     of Draw: (round.a, round.a)
-    of Win: (round.a, WhatWinsAgainst(round.a))
 
 proc main =
-  const input  = staticRead("day2.txt").strip()
-  const rounds = input.split('\n').map(x => (ToChoice(x[0]), ToChoice(x[2])))
+  const input = staticRead("day2.txt").strip()
+  let rounds = input.split('\n').mapIt((ToChoice(it[0]), ToChoice(it[2])))
   echo("Part1: ", rounds.map(ScoreRound).sum)
-  echo("Part2: ", rounds.map(x => x.AlterRound.ScoreRound).sum)
+  echo("Part2: ", rounds.map(AlterRound).map(ScoreRound).sum)
 
 when isMainModule:
   main()
