@@ -26,7 +26,6 @@ type
   Outcome = enum Lose, Draw, Win
   Round = tuple[a: Choice, b: Choice]
 
-
 func WhatLosesTo(c:Choice):auto = [Rock:Scissors, Paper:Rock, Scissors:Paper][c]
 func WhatWinsAgainst(c:Choice):auto = WhatLosesTo(WhatLosesTo(c))
 
