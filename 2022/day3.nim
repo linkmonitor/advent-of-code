@@ -1,16 +1,15 @@
-# Each line of the input describes the contents of one rucksack. Items are
-# identified using single letters (case sensitive). Each rucksack has two
-# compartments and items are evenly distributed between them; the first half of
-# the line describes items in the first compartment and likewise for the second.
+# Each input line describes the contents of a Rucksack. Single letters identify
+# Rucksack Items (case sensitive). Rucksacks have two compartments and Items are
+# evenly distributed; the first half of the line describes items in the first
+# compartment; likewise for the second half of the line and second compartment.
 #
-# Items have priorities based on their identifiers. Items a..z have priorities
-# 1..26 and items A..Z have priorities 27..52. What is the sum of
-# bi-compartmental item priorities?
+# Item identifiers have priorities. a..z have priorities 1..26 and A..Z have
+# priorities 27..52. What is the sum of bi-compartmental item priorities?
 #
 #--- Part Two ---
 #
-# Every three lines represents a group of elves. The only item common to all
-# elves in a group is their badge. What is the sum of group badge priorities?
+# Every three input lines represent an elf group. Badges are the only items
+# common to a group. What is the sum of group-badge priorities?
 
 import itertools
 import math
