@@ -4,12 +4,12 @@
 # compartment; likewise for the second half of the line and second compartment.
 #
 # Item identifiers have priorities. a..z have priorities 1..26 and A..Z have
-# priorities 27..52. What is the sum of bi-compartmental item priorities?
+# priorities 27..52. Sum the priorities of items found in both compartments.
 #
 #--- Part Two ---
 #
 # Every three input lines represent an elf group. Badges are the only items
-# common to a group. What is the sum of group-badge priorities?
+# found in all Rucksacks of a group. What is the sum of group-badge priorities?
 
 import itertools
 import math
