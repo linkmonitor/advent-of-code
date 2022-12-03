@@ -34,14 +34,14 @@ func ToOutcome(round:Round):Outcome =
   if (round.b == WhatWinsAgainst(round.a)): return Win
   if (round.b == round.a): return Draw
 
-func ToPoints(outcome:Outcome):int = [Lose:0, Draw:3, Win:6][outcome]
-func ToPoints(choice:Choice):int = [Rock:1, Paper:2, Scissors:3][choice]
-func ToPoints(round:Round):int = round.ToOutcome.ToPoints + round.b.ToPoints
+func Score(outcome:Outcome):int = [Lose:0, Draw:3, Win:6][outcome]
+func Score(choice:Choice):int = [Rock:1, Paper:2, Scissors:3][choice]
+func Score(round:Round):int = round.ToOutcome.Score + round.b.Score
 
-func ToChoice(input:char):Choice =
-  if input in {'A', 'X'}: return Rock
-  if input in {'B', 'Y'}: return Paper
-  if input in {'C', 'Z'}: return Scissors
+func ToChoice(ch:char):Choice =
+  if ch in {'A', 'X'}: return Rock
+  if ch in {'B', 'Y'}: return Paper
+  if ch in {'C', 'Z'}: return Scissors
 
 func AlterRound(round:Round):Round =
   case cast[Outcome](round.b): # Entry order in Choice/Outcome permits this.
@@ -51,9 +51,9 @@ func AlterRound(round:Round):Round =
 
 proc main =
   const input = staticRead("day2.txt").strip()
-  let rounds = input.split('\n').mapIt((ToChoice(it[0]), ToChoice(it[2])))
-  echo("Part1: ", rounds.map(ToPoints).sum)
-  echo("Part2: ", rounds.mapIt(it.AlterRound.ToPoints).sum)
+  let rounds = input.split('\n').mapIt((it[0].ToChoice, it[2].ToChoice))
+  echo("Part1: ", rounds.map(Score).sum)
+  echo("Part2: ", rounds.mapIt(it.AlterRound.Score).sum)
 
 when isMainModule:
   main()
