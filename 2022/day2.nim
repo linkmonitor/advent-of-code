@@ -53,7 +53,7 @@ proc main =
   const input = staticRead("day2.txt").strip()
   let rounds = input.split('\n').mapIt((ToChoice(it[0]), ToChoice(it[2])))
   echo("Part1: ", rounds.map(ToPoints).sum)
-  echo("Part2: ", rounds.map(AlterRound).map(ToPoints).sum)
+  echo("Part2: ", rounds.mapIt(it.AlterRound.ToPoints).sum)
 
 when isMainModule:
   main()
