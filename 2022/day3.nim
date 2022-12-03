@@ -30,9 +30,8 @@ func Score(item:Item):int =
 func Score(rucksack:Rucksack):int = rucksack.CommonItems.toSeq.map(Score).sum
 func Score(group:Group):int = group.CommonItems.toSeq.map(Score).sum
 
-func ParseRuckSack(s:string):Rucksack =
-  let halves = s.chunked(s.len div 2).toSeq
-  (halves[0].toSet, halves[1].toSet)
+func Mid(s:string):int = s.len div 2
+func ParseRuckSack(s:string):Rucksack = (s[0..<s.Mid].toSet, s[s.Mid..^1].toSet)
 
 proc main =
   const input = staticRead("day3.txt").strip()
