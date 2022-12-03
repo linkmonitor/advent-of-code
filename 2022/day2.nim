@@ -26,13 +26,14 @@ type
   Outcome = enum Lose, Draw, Win
   Round = tuple[a: Choice, b: Choice]
 
+
 func WhatLosesTo(c:Choice):auto = [Rock:Scissors, Paper:Rock, Scissors:Paper][c]
 func WhatWinsAgainst(c:Choice):auto = WhatLosesTo(WhatLosesTo(c))
 
 func ToChoice(input:char):Choice =
-  if input in ['A', 'X']: return Rock
-  if input in ['B', 'Y']: return Paper
-  if input in ['C', 'Z']: return Scissors
+  if input in {'A', 'X'}: return Rock
+  if input in {'B', 'Y'}: return Paper
+  if input in {'C', 'Z'}: return Scissors
 
 func ToOutcome(round:Round):Outcome =
   if (round.b == WhatLosesTo(round.a)): return Lose
