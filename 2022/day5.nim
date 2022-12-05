@@ -14,10 +14,10 @@ func InitialState(input:string):State =
   let num_stacks = (2 + lines[0].len) div 4
   newSeq(result, num_stacks)
   for line in lines[1..^1]:
-    for idx, ch in line:
-      if ((idx + 2) mod 4 == 3) and ch in 'A'..'Z':
-        let stack = (idx + 2) div 4
-        result[stack].Push(ch)
+    for idx in countup(3, line.high+2, 4):
+      if line[idx-2] in 'A'..'Z':
+        let stack = idx div 4
+        result[stack].Push(line[idx-2])
 
 func ToMove(input:string):Move =
   let (_, num, src, dst) = input.scanTuple("move $i from $i to $i")
