@@ -2,22 +2,17 @@ import stack
 import std/[algorithm, sequtils, strscans, strutils]
 
 type
-  Crate = range['A'..'Z']
-  Stack = stack.Stack[100, Crate]
+  Stack = stack.Stack[100, range['A'..'Z']]
   Move  = tuple[num:int, src:int, dst:int]
   State = seq[Stack]
 
 func InitialState(input:string):State =
-  # Assume two spaces precede each line. Thus, valid crates (or an empty space)
-  # appear every four characters.
-  let lines = input.split('\n').reversed
-  let num_stacks = (2 + lines[0].len) div 4
-  newSeq(result, num_stacks)
+  let lines = input.split('\n').reversed  # Push bottom of stacks first.
+  newSeq(result, parseInt($lines[0][^1])) # Preallocate stacks.
   for line in lines[1..^1]:
-    for idx in countup(3, line.high+2, 4):
-      if line[idx-2] in 'A'..'Z':
-        let stack = idx div 4
-        result[stack].Push(line[idx-2])
+    for idx in countup(1, line.high, 4):
+      if line[idx] in 'A'..'Z':
+        result[(idx+2) div 4].Push(line[idx])
 
 func ToMove(input:string):Move =
   let (_, num, src, dst) = input.scanTuple("move $i from $i to $i")
