@@ -1,5 +1,5 @@
 import itertools, util
-import std/[sequtils, setutils, strutils, sugar]
+import std/[sequtils, setutils, strutils]
 
 func CharsAreUnique(array:seq[char]):bool = array.toSet.len == array.len
 
