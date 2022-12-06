@@ -23,7 +23,7 @@ proc ApplyWithAim(pos:var Position, cmd:Command) =
 
 proc main =
   const input = staticRead("day2.txt").strip()
-  const commands = input.split('\n').map(ToCommand)
+  const commands = input.splitLines.map(ToCommand)
 
   var position:Position = (0, 0, 0)
   for command in commands: position.Apply(command)
