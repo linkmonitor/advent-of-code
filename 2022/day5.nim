@@ -27,8 +27,8 @@ proc MoveAllAtOnce(state:var State, move:Move) =
 
 proc main =
   const partitions = staticRead("day5.txt").split("\n\n")
-  const moves = partitions[1].split('\n').map(ToMove)
-  const initial_state = partitions[0].split('\n').reversed.InitialState
+  const moves = partitions[1].splitLines.map(ToMove)
+  const initial_state = partitions[0].splitLines.reversed.InitialState
 
   var state = initial_state
   for move in moves: state.MoveOneByOne(move)

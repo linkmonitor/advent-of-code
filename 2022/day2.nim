@@ -51,7 +51,7 @@ func AlterRound(round:Round):Round =
 
 proc main =
   const input = staticRead("day2.txt").strip()
-  let rounds = input.split('\n').mapIt((it[0].ToChoice, it[2].ToChoice))
+  let rounds = input.splitLines.mapIt((it[0].ToChoice, it[2].ToChoice))
   echo("Part1: ", rounds.map(Score).sum)
   echo("Part2: ", rounds.mapIt(it.AlterRound.Score).sum)
 

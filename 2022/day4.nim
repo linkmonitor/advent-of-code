@@ -17,7 +17,7 @@ func ParsePair(input:string):Pair =
 
 proc main =
   const input = staticRead("day4.txt").strip()
-  let pairs = input.split('\n').map(ParsePair)
+  let pairs = input.splitLines.map(ParsePair)
   echo("Part1: ", pairs.filter(x => (x.a <= x.b) or (x.b <= x.a)).len)
   echo("Part2: ", pairs.filter(x => (x.a * x.b) != {}).len)
 
