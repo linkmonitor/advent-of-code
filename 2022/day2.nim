@@ -1,25 +1,4 @@
-# The input is a strategy guide for several Rounds of rock, paper, scissors. It
-# has two, space-delimited columns. The first column represents your opponents
-# Choice in that round: A for Rock, B for Paper, and C for Scissors. The second
-# column represents what you should Choose for that round: X for Rock, Y for
-# Paper, and Z for scissors.
-#
-# Each round's score is the sum of the outcome and choice scores. Winning,
-# Drawing, and Losing award 6, 3, and 0 points respectively for the outcome.
-# Rock, Paper, and Scissors award 1, 2, 3 points respectively for your choice.
-#
-# What is your total score?
-#
-# --- Part Two ---
-#
-# Reinterpret the second column of the input-now X means lose, Y means draw and
-# Z means win-play again, and score rounds the same way.
-#
-# What is your total score?
-
-import math
-import sequtils
-import strutils
+import std/[math, sequtils, strutils]
 
 type
   Choice  = enum Rock, Paper, Scissors

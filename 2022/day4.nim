@@ -1,6 +1,3 @@
-# Part1: Find all task pairs where one range contains the other.
-# Part2: Find all task pairs with any overlap whatsoever.
-
 import std/[sequtils, strscans, strutils, sugar]
 
 type

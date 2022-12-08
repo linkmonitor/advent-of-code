@@ -1,19 +1,5 @@
-# Each input line describes the contents of a Rucksack. Single letters identify
-# Rucksack Items (case sensitive). Rucksacks have two compartments and Items are
-# evenly distributed; the first half of the line describes items in the first
-# compartment; likewise for the second half of the line and second compartment.
-#
-# Item identifiers have priorities. a..z have priorities 1..26 and A..Z have
-# priorities 27..52. Sum the priorities of items found in both compartments.
-#
-#--- Part Two ---
-#
-# Every three input lines represent an elf group. Badges are the only items
-# found in all Rucksacks of a group. What is the sum of group-badge priorities?
-
 import itertools
-import math
-import std/[setutils, sequtils, strutils]
+import std/[math, setutils, sequtils, strutils]
 
 type
   Item = char
