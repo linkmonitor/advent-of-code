@@ -1,48 +1,49 @@
-import std/[sequtils, strutils]
+import arraymancer
+import std/[sequtils, strutils, sugar]
 
-const test_input = """
-30373
-25512
-65332
-33549
-35390
-""".strip.splitLines
+const kInput = staticRead("day8.txt").strip.splitLines
+const (kRows, kCols) = (kInput.len, kInput[0].len)
+const kNumbers = kInput.join.mapIt(parseInt($it))
+let kTensor = kNumbers.toTensor.reshape(kRows, kCols)
 
-type
-  Tree = tuple[a,b:int]
-  Height = int
-  Direction = enum North, East, South, West
+proc scan[T, U](arr:openarray[T], start:U, f:(T, U) -> U): seq[U] =
+  var last = start
+  for elem in arr:
+    last = f(last, elem)
+    result.add(last)
 
-const kInput = test_input #staticRead("day8.txt").strip.splitLines
-const (kRows, kCols) = (kInput.len, test_input[0].len)
-const kForest = block:
-    var forest:array[kRows, array[kCols, int]]
-    for row, line in kInput:
-      for col, ch in line:
-        forest[row][col] = parseInt($ch)
-    forest
-const kTrees = block:
-    var trees:seq[Tree]
-    for a in 0..<kRows:
-      for b in 0..<kCols:
-        trees.add((a, b))
-    trees
+proc max[T](s1, s2: Tensor[T]):Tensor[T] =
+  result = clone(s1)
+  doAssert(s1.shape == s2.shape)
+  for (idx, item )in result.menumerate:
+    item = max(s1.atContiguousIndex(idx),
+               s2.atContiguousIndex(idx))
 
-iterator Neighbors(tree:Tree, direction:Direction):Height =
-  case direction:
-    of North: (for i in 0..<tree.a:         yield kForest[i][tree.b])
-    of South: (for i in (tree.a+1)..<kRows: yield kForest[i][tree.b])
-    of West:  (for i in 0..<tree.b:         yield kForest[tree.a][i])
-    of East:  (for i in (tree.b+1)..<kCols: yield kForest[tree.a][i])
+proc increasing[T](s1, s2:Tensor[T]):Tensor[T] =
+  result = clone(s1)
+  doAssert(s1.shape == s2.shape)
+  for (idx, item) in result.menumerate:
+    item[0] = s2.atContiguousIndex(idx)[0]
+    item[1] = int(s2.atContiguousIndex(idx)[0] >
+                  s1.atContiguousIndex(idx)[0])
 
-proc IsVisible(tree:Tree):bool =
-  let value = kForest[tree.a][tree.b]
-  for direction in Direction:
-    if tree.Neighbors(direction).toseq.allIt(it < value): return true
+proc visibleFromLeft[T](t:Tensor[T]):Tensor[int] =
+  let shape = t.shape
+  let zero_col = zeros[T](shape[0], 1)
+  let max_scan = t.split(1, 1).scan(zero_col, max).concat(1)
+  let neg1_col = (ones[int](shape[0],1) * -1).map(x => (x, 0))
+  let increase = max_scan.map(x => (x, 0)).split(1, 1).scan(neg1_col, increasing).concat(1)
+  increase.map(x => int(x[1] > 0))
+
+proc visible[T](t:Tensor[T]):Tensor[int] =
+  let left = t.visibleFromLeft
+  let right = t[_, ^1..0|-1].visibleFromLeft[_, ^1..0|-1]
+  let top = t.transpose.visibleFromLeft.transpose
+  let bott = t[^1..0|-1, _].transpose.visibleFromLeft.transpose[^1..0|-1, _]
+  left +. right +. top +. bott
 
 proc main =
-  echo("Part1: ", kTrees.filter(IsVisible).len)
-
+  echo(kTensor.visible.toSeq.countIt(it > 0))
 
 when isMainModule:
   main()
