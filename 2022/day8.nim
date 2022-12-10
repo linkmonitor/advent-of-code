@@ -25,23 +25,19 @@ proc treesVisible1d[T](neighbors:Tensor[T], limit:int):int =
     result.inc
     if neighbor >= limit: break
 
-proc scenicScore[T](t:Tensor[T], tree:tuple[a,b:int]):int =
-  # All trees on the edge have a scenic score of zero
-  let (kRows, kCols) = (t.shape[0], t.shape[1])
-  if tree.a == 0 or tree.b == 0 or (tree.a == kRows-1) or (tree.b == kCols-1):
-    return 0
-  let height = t[tree.a, tree.b]
+proc scenicScore[T](t:Tensor[T], tree:seq[int]):int =
+  # Trees on the edge score a zero.
+  if tree[0] in {0, t.shape[0]-1} or tree[1] in {0, t.shape[1]-1}: return 0
+  let height = t[tree[0], tree[1]]
   result = 1
-  result *= t[tree.a+1.._, tree.b].treesVisible1d(height)
-  result *= t[tree.a-1..0|-1, tree.b].treesVisible1d(height)
-  result *= t[tree.a, tree.b+1.._].treesVisible1d(height)
-  result *= t[tree.a, tree.b-1..0|-1].treesVisible1d(height)
+  result *= t[tree[0]+1.._   , tree[1]        ].treesVisible1d(height)
+  result *= t[tree[0]-1..0|-1, tree[1]        ].treesVisible1d(height)
+  result *= t[tree[0]        , tree[1]+1.._   ].treesVisible1d(height)
+  result *= t[tree[0]        , tree[1]-1..0|-1].treesVisible1d(height)
 
 proc highestScenicScore[T](t:Tensor[T]):int =
   for (coord, _) in t.pairs:
-    let tree = (coord[0], coord[1])
-    let score = t.scenicScore(tree)
-    result = max(result, score)
+    result = max(result, t.scenicScore(coord))
 
 proc main =
   echo("Part1: ", kTensor.visible.sum)
