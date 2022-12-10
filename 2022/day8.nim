@@ -8,6 +8,7 @@ let kTensor = kInput.join.mapIt(parseInt($it)).toTensor.reshape(kRows, kCols)
 
 proc visibleFromTop[T](t:Tensor[T]):Tensor[int] =
   let neg_one = onesLike[int](t[0, _]).negate.map(x => (x, 0))
+  # (S)tore maximum and (A)ccumulate the cells which cause the max to increase.
   func smax_ainc(x:tuple[a, b:int], y:int):type(x) = (max(x.a, y), int(y > x.a))
   t.ScanRows(smax_ainc, neg_one).map(x => x.b)
 
