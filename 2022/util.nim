@@ -1,4 +1,5 @@
 import arraymancer
+import arraymancer/laser/strided_iteration/foreach
 import std/[sugar]
 
 template doTimes*(n:Natural, body:typed) =
@@ -14,12 +15,10 @@ proc ElementFirst*[T](arr:openArray[T], pred:proc(x:T):bool):T =
   arr[arr.IndexFirst(pred)]
 
 template universal[T, U, V](f:(T, U) -> V):auto =
-  const u = proc(a:Tensor[T], b:Tensor[U]):Tensor[V] =
+  proc(a:Tensor[T], b:Tensor[U]):Tensor[V] =
     doAssert(a.shape == b.shape)
     result = clone(a)
-    for (idx, elt) in result.menumerate:
-      elt = f(a.atContiguousIndex(idx), b.atContiguousIndex(idx))
-  u
+    forEach x in a, y in b, z in result: z = f(x, y)
 
 proc Scan*[T, U](xs:openarray[T], x0:U, f:(U, T) -> U): seq[U] =
   var xn_1 = x0
