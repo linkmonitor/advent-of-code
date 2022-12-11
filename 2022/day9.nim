@@ -1,9 +1,9 @@
 import std/[sets, sequtils, strscans, strutils, sugar]
 
 type
-  Delta = array[2, int]
+  Delta    = array[2, int]
   Position = array[2, int]
-  Context = tuple[head, tail:Position, tails:HashSet[Position]]
+  Context  = tuple[head, tail:Position, tails:HashSet[Position]]
 
 func ParseDelta(input:string):Delta =
   let (_, dir, dist) = input.scanTuple("$+ $i")
