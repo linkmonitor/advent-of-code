@@ -2,10 +2,9 @@ import arraymancer
 import std/[sequtils, strutils, sugar]
 import util
 
-const kInput = staticRead("day8.txt").strip.splitLines
 let kTensor = block:
-  const (kRows, kCols) = (kInput.len, kInput[0].len)
-  kInput.join.mapIt(parseInt($it)).toTensor.reshape(kRows, kCols)
+  const kInput = staticRead("day8.txt").strip.splitLines
+  kInput.join.mapIt(parseInt($it)).toTensor.reshape(kInput.len, kInput[0].len)
 
 proc visibleFromTop[T](t:Tensor[T]):Tensor[int] =
   let neg_one = onesLike[int](t[0, _]).negate.map(x => (x, 0))
