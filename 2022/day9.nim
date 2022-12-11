@@ -14,10 +14,11 @@ func ParseDelta(input:string):Delta =
   if dir == "R": return [ dist,     0]
 
 proc Apply(context:var Context, delta:Delta) =
+  context.tails.incl(context.tail)
+  # Move one space at a time to capture all the tail locations.
   let times = delta.Abs.max
   let delta = delta.Clamp(-1, 1)
-  context.tails.incl(context.tail)
-  for _ in 0..<times:
+  doTimes times:
     context.head += delta
     let diff = context.head - context.tail
     if 2 in diff.Abs:
