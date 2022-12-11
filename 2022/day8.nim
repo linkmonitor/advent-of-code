@@ -29,19 +29,15 @@ proc scenicScore[T](t:Tensor[T], tree:seq[int]):int =
   # Trees on the edge score a zero.
   if tree[0] in {0, t.shape[0]-1} or tree[1] in {0, t.shape[1]-1}: return 0
   let height = t[tree[0], tree[1]]
-  result = 1
-  result *= t[tree[0]+1.._   , tree[1]        ].treesVisible1d(height)
+  result  = t[tree[0]+1.._   , tree[1]        ].treesVisible1d(height)
   result *= t[tree[0]-1..0|-1, tree[1]        ].treesVisible1d(height)
   result *= t[tree[0]        , tree[1]+1.._   ].treesVisible1d(height)
   result *= t[tree[0]        , tree[1]-1..0|-1].treesVisible1d(height)
 
-proc highestScenicScore[T](t:Tensor[T]):int =
-  for (coord, _) in t.pairs:
-    result = max(result, t.scenicScore(coord))
-
 proc main =
-  echo("Part1: ", kTensor.visible.sum)
-  echo("Part2: ", kTensor.highestScenicScore)
+  let t = kTensor
+  echo("Part1: ", t.visible.sum)
+  echo("Part2: ", t.pairs.toSeq.mapIt(t.scenicScore(it[0])).max)
 
 when isMainModule:
   main()
