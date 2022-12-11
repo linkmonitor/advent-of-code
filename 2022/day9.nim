@@ -13,6 +13,10 @@ func ParseDelta(input:string):Delta =
   if dir == "L": return [-dist,     0]
   if dir == "R": return [ dist,     0]
 
+proc Chase(tail:var Position, head: Position) =
+  let diff = head - tail
+  if 2 in diff.Abs: tail += diff.Clamp(-1, 1)
+
 proc Apply(context:var Context, delta:Delta) =
   context.tails.incl(context.tail)
   # Move one space at a time to capture all the tail locations.
@@ -20,10 +24,8 @@ proc Apply(context:var Context, delta:Delta) =
   let delta = delta.Clamp(-1, 1)
   doTimes times:
     context.head += delta
-    let diff = context.head - context.tail
-    if 2 in diff.Abs:
-      context.tail += diff.Clamp(-1, 1)
-      context.tails.incl(context.tail)
+    context.tail.Chase(context.head)
+    context.tails.incl(context.tail)
 
 proc main =
   const deltas = staticRead("day9.txt").strip.splitLines.map(ParseDelta)
