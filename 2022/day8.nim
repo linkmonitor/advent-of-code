@@ -28,10 +28,10 @@ proc scenicScore[T](t:Tensor[T], tree:seq[int]):int =
   # Trees on the edge score a zero.
   if tree[0] in {0, t.shape[0]-1} or tree[1] in {0, t.shape[1]-1}: return 0
   let height = t[tree[0], tree[1]]
-  result  = t[tree[0]+1.._   , tree[1]        ].treesVisible1d(height)
-  result *= t[tree[0]-1..0|-1, tree[1]        ].treesVisible1d(height)
-  result *= t[tree[0]        , tree[1]+1.._   ].treesVisible1d(height)
-  result *= t[tree[0]        , tree[1]-1..0|-1].treesVisible1d(height)
+  result  = t[tree[0]+1.._   , tree[1]        ].treesVisible1d(height) # Right
+  result *= t[tree[0]-1..0|-1, tree[1]        ].treesVisible1d(height) # Left
+  result *= t[tree[0]        , tree[1]+1.._   ].treesVisible1d(height) # Up
+  result *= t[tree[0]        , tree[1]-1..0|-1].treesVisible1d(height) # Down
 
 proc main =
   let t = kTensor
