@@ -7,18 +7,18 @@ type
   Command = tuple[kind:CommandKind, dir:string]
   Invocation = tuple[command:Command, output:seq[string]]
 
-template DropEmpty(x:typed):auto = x.filterIt(it.len > 0)
+template dropEmpty(x:typed):auto = x.filterIt(it.len > 0)
 
-func ParseCommand(input:string):Command =
+func parseCommand(input:string):Command =
   let terms = input.split(' ')
   if terms.len == 1: return (kind:ls, dir:"") else: (kind:cd, dir:terms[1])
 
-func ParseInvocation(input:string):Invocation =
+func parseInvocation(input:string):Invocation =
   let lines = input.splitLInes
-  result.command = ParseCommand(lines[0])
-  result.output = lines[1..^1].DropEmpty
+  result.command = parseCommand(lines[0])
+  result.output = lines[1..^1].dropEmpty
 
-func ToDirTree(invocations:seq[Invocation]):DirTree =
+func toDirTree(invocations:seq[Invocation]):DirTree =
   var curdir = ""
   for invocation in invocations:
     let (kind, dir) = invocation.command
@@ -35,10 +35,10 @@ func ToDirTree(invocations:seq[Invocation]):DirTree =
 
 proc main =
   const input = staticRead("day7.txt").strip
-  let dirs = input.split("$ ").DropEmpty.map(ParseInvocation).ToDirTree()
+  let dirs = input.split("$ ").dropEmpty.map(parseInvocation).toDirTree()
   echo("Part1: ", dirs.values.toSeq.filterIt(it <= 100_000).sum)
   let threshold = 30_000_000 - (70_000_000 - dirs["/"])
-  echo("Part2: ", dirs.values.toSeq.sorted.ElementFirst(x => x > threshold))
+  echo("Part2: ", dirs.values.toSeq.sorted.elementFirst(x => x > threshold))
 
 when isMainModule:
   main()

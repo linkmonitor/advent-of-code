@@ -6,37 +6,37 @@ type
   Move  = tuple[num:int, src:int, dst:int]
   State = seq[Stack]
 
-func InitialState(lines:seq[string]):State =
+func initialState(lines:seq[string]):State =
   newSeq(result, parseInt($lines[0][^1])) # Preallocate stacks.
   for line in lines[1..^1]:
     for idx in countup(1, line.high, 4):
       if line[idx] in 'A'..'Z':
-        result[(idx+2) div 4].Push(line[idx])
+        result[(idx+2) div 4].push(line[idx])
 
-func ToMove(input:string):Move =
+func toMove(input:string):Move =
   let (_, num, src, dst) = input.scanTuple("move $i from $i to $i")
   (num, src-1, dst-1)
 
-proc MoveOneByOne(state:var State, move:Move) =
-  doTimes(move.num): state[move.dst].Push(state[move.src].Pop())
+proc moveOneByOne(state:var State, move:Move) =
+  doTimes(move.num): state[move.dst].push(state[move.src].pop)
 
-proc MoveAllAtOnce(state:var State, move:Move) =
+proc moveAllAtOnce(state:var State, move:Move) =
   var stack:Stack
-  doTimes(move.num): stack.Push(state[move.src].Pop)
-  doTimes(move.num): state[move.dst].Push(stack.Pop)
+  doTimes(move.num): stack.push(state[move.src].pop)
+  doTimes(move.num): state[move.dst].push(stack.pop)
 
 proc main =
   const partitions = staticRead("day5.txt").split("\n\n")
-  const moves = partitions[1].splitLines.map(ToMove)
-  const initial_state = partitions[0].splitLines.reversed.InitialState
+  const moves = partitions[1].splitLines.map(toMove)
+  const initialState = partitions[0].splitLines.reversed.initialState
 
-  var state = initial_state
-  for move in moves: state.MoveOneByOne(move)
-  echo("Part1: ", state.mapIt(it.Top).join())
+  var state = initialState
+  for move in moves: state.moveOneByOne(move)
+  echo("Part1: ", state.mapIt(it.top).join())
 
-  state = initial_state
-  for move in moves: state.MoveAllAtOnce(move)
-  echo("Part2: ", state.mapIt(it.Top).join())
+  state = initialState
+  for move in moves: state.moveAllAtOnce(move)
+  echo("Part2: ", state.mapIt(it.top).join())
 
 when isMainModule:
   main()

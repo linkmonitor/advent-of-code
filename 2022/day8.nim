@@ -2,21 +2,21 @@ import arraymancer
 import std/[sequtils, strutils, sugar]
 import util
 
-let kTensor = block:
-  const kInput = staticRead("day8.txt").strip.splitLines
-  kInput.join.mapIt(parseInt($it)).toTensor.reshape(kInput.len, kInput[0].len)
+let input = block:
+  const input = staticRead("day8.txt").strip.splitLines
+  input.join.mapIt(parseInt($it)).toTensor.reshape(input.len, input[0].len)
 
 proc visibleFromTop[T](t:Tensor[T]):Tensor[int] =
-  let neg_one = onesLike[int](t[0, _]).negate.map(x => (x, 0))
+  let negOne = onesLike[int](t[0, _]).negate.map(x => (x, 0))
   # (S)tore maximum and (A)ccumulate the cells which cause the max to increase.
   func smax_ainc(x:tuple[a, b:int], y:int):type(x) = (max(x.a, y), int(y > x.a))
-  t.ScanRows(smax_ainc, neg_one).map(x => x.b)
+  t.scanRows(smax_ainc, neg_one).map(x => x.b)
 
 proc visible[T](t:Tensor[T]):Tensor[int] =
   let top = t.visibleFromTop
-  let bot = t.Flipped.visibleFromTop.Flipped
+  let bot = t.flipped.visibleFromTop.flipped
   let lef = t.transpose.visibleFromTop.transpose
-  let rig = t.Reversed.transpose.visibleFromTop.transpose.Reversed
+  let rig = t.backward.transpose.visibleFromTop.transpose.backward
   (top +. bot +. lef +. rig).clamp(0, 1)
 
 proc treesVisible1d[T](neighbors:Tensor[T], limit:int):int =
@@ -34,7 +34,7 @@ proc scenicScore[T](t:Tensor[T], tree:seq[int]):int =
   result *= t[tree[0]        , tree[1]-1..0|-1].treesVisible1d(height) # Down
 
 proc main =
-  let t = kTensor
+  let t = input
   echo("Part1: ", t.visible.sum)
   echo("Part2: ", t.pairs.toSeq.mapIt(t.scenicScore(it[0])).max)
 
