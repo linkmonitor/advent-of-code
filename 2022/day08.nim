@@ -3,7 +3,7 @@ import std/[sequtils, strutils, sugar]
 import util
 
 let input = block:
-  const input = staticRead("day8.txt").strip.splitLines
+  const input = staticRead("day08.txt").strip.splitLines
   input.join.mapIt(parseInt($it)).toTensor.reshape(input.len, input[0].len)
 
 proc visibleFromTop[T](t:Tensor[T]):Tensor[int] =

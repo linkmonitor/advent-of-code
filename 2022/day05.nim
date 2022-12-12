@@ -26,7 +26,7 @@ proc moveAllAtOnce(state:var State, move:Move) =
   doTimes(move.num): state[move.dst].push(stack.pop)
 
 proc main =
-  const partitions = staticRead("day5.txt").split("\n\n")
+  const partitions = staticRead("day05.txt").split("\n\n")
   const moves = partitions[1].splitLines.map(toMove)
   const initialState = partitions[0].splitLines.reversed.initialState
 

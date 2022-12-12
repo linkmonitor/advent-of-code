@@ -9,7 +9,7 @@ func parseCalorieLists(input:string):seq[CalorieList] =
     result.add(list.strip().splitLines.map(x => parseInt(x)))
 
 proc main =
-  const input = staticRead("day1.txt")
+  const input = staticRead("day01.txt")
   const calorieSums = parseCalorieLists(input).map(x => sum(x))
   echo("Part1: ", calorieSums.max())
   echo("Part2: ", calorieSums.sorted(order=Descending)[0..2].sum())

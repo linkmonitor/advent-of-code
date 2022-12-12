@@ -13,7 +13,7 @@ func parsePair(input:string):Pair =
   (a.parseTasks, b.parseTasks)
 
 proc main =
-  const input = staticRead("day4.txt").strip()
+  const input = staticRead("day04.txt").strip()
   let pairs = input.splitLines.map(parsePair)
   echo("Part1: ", pairs.filter(x => (x.a <= x.b) or (x.b <= x.a)).len)
   echo("Part2: ", pairs.filter(x => (x.a * x.b) != {}).len)

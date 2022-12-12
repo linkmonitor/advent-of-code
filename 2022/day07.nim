@@ -34,7 +34,7 @@ func toDirTree(invocations:seq[Invocation]):DirTree =
         for path in curdir.parentDirs: result.inc(path, size)
 
 proc main =
-  const input = staticRead("day7.txt").strip
+  const input = staticRead("day07.txt").strip
   let dirs = input.split("$ ").dropEmpty.map(parseInvocation).toDirTree()
   echo("Part1: ", dirs.values.toSeq.filterIt(it <= 100_000).sum)
   let threshold = 30_000_000 - (70_000_000 - dirs["/"])

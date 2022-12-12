@@ -31,7 +31,7 @@ proc apply(context:var Context, delta:Delta) =
     context.tailpos.incl(context.knots[^1])
 
 proc main =
-  const deltas = staticRead("day9.txt").strip.splitLines.map(parseDelta)
+  const deltas = staticRead("day09.txt").strip.splitLines.map(parseDelta)
   var c2:Context[2]
   for delta in deltas: c2.apply(delta)
   echo("Part1: ", c2.tailpos.len)

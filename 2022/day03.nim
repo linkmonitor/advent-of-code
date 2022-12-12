@@ -20,7 +20,7 @@ func mid(s:string):int = s.len div 2
 func parseRucksack(s:string):Rucksack = (s[0..<s.mid].toSet, s[s.mid..^1].toSet)
 
 proc main =
-  const input = staticRead("day3.txt").strip()
+  const input = staticRead("day03.txt").strip()
   const rucksacks = input.splitLines.map(parseRucksack)
   echo("Part1: ", rucksacks.map(score).sum)
   echo("Part2: ", rucksacks.chunked(3).toSeq.map(score).sum)

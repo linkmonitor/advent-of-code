@@ -29,7 +29,7 @@ func alterRound(round:Round):Round =
     of Draw: (round.a, round.a)
 
 proc main =
-  const input = staticRead("day2.txt").strip()
+  const input = staticRead("day02.txt").strip()
   let rounds = input.splitLines.mapIt((it[0].toChoice, it[2].toChoice))
   echo("Part1: ", rounds.map(score).sum)
   echo("Part2: ", rounds.mapIt(it.alterRound.score).sum)
