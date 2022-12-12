@@ -17,7 +17,7 @@ func ParseDelta(input:string):Delta =
 
 proc Chase(tail:var Position, head: Position) =
   let diff = head - tail
-  if 2 in diff.Abs: tail += diff.Clamp(-1, 1)
+  if diff.Abs.contains(2): tail += diff.Clamp(-1, 1)
 
 proc Apply(context:var Context, delta:Delta) =
   context.tailpos.incl(context.knots[^1])
