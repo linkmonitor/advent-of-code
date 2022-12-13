@@ -39,8 +39,7 @@ proc main =
   echo("Part1: ", (pc:0, x:1).execute(program, upTo=220).signalStrengths.sum)
 
   let screen:Screen = (pc:0, x:1).execute(program, upTo=200).render
-  echo("Part2: ")
-  echo(screen)
+  echo("Part2:\n", screen)
 
 when isMainModule:
   main()
