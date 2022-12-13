@@ -46,7 +46,6 @@ proc doRound(monkeys:var openarray[Monkey], stressReduction:int=3) =
     monkeys[idx].things = @[]
 
 func monkeyBusiness(monkeys:openarray[Monkey]):int =
-  debugecho(monkeys.mapIt(it.inspected))
   monkeys.mapIt(it.inspected).sorted(Descending)[0..1].foldl(a * b)
 
 proc main =
